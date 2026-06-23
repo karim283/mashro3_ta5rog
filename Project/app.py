@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env"), override=False)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -22,15 +22,17 @@ app.add_middleware(
 )
 
 # Connect to Groq API
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if GROQ_API_KEY:
-    client = OpenAI(
+GROQ_API_KEY = os.getenv("GROQ_API_KEY") or os.getenv("OPENAI_API_KEY")
+def get_client():
+    if not GROQ_API_KEY:
+        logger.warning("GROQ_API_KEY is not set. Chatbot requests will return HTTP 503 until it is configured.")
+        return None
+    return OpenAI(
         api_key=GROQ_API_KEY,
         base_url="https://api.groq.com/openai/v1",
     )
-else:
-    client = None
-    logger.warning("GROQ_API_KEY is not set. Chatbot requests will return HTTP 503 until it is configured.")
+
+client = get_client()
 
 # This is the car expert system prompt
 SYSTEM_PROMPT = """You are CarCareX Assistant, an expert automotive diagnostic assistant 
