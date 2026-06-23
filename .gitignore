@@ -1,0 +1,37 @@
+﻿# Dependencies
+node_modules/
+**/node_modules/
+
+# Python virtual environments
+.venv/
+**/.venv/
+__pycache__/
+**/__pycache__/
+
+# Vector databases (chatbot) - regenerated, not needed in repo
+Project/car_db/
+Project/chroma_db_v2/
+Project/vectorstore/
+**/*.sqlite3
+
+# Large SQL dumps - shared separately, not via git
+sql_dumps/
+cardata-20260525T190327Z-3-001/
+**/*.ibd
+**/*.bin
+mashro3/SHOW DATABASES;.sql
+
+# Env files - secrets
+.env
+**/.env
+
+# Build output
+dist/
+**/dist/
+
+# Misc
+conflict_scan.txt
+.gitattributes
+
+Project/venv311/
+**/venv311/
