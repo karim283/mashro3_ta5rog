@@ -22,10 +22,15 @@ app.add_middleware(
 )
 
 # Connect to Groq API
-client = OpenAI(
-    api_key=os.environ.get("GROQ_API_KEY"),
-    base_url="https://api.groq.com/openai/v1",
-)
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+if GROQ_API_KEY:
+    client = OpenAI(
+        api_key=GROQ_API_KEY,
+        base_url="https://api.groq.com/openai/v1",
+    )
+else:
+    client = None
+    logger.warning("GROQ_API_KEY is not set. Chatbot requests will return HTTP 503 until it is configured.")
 
 # This is the car expert system prompt
 SYSTEM_PROMPT = """You are CarCareX Assistant, an expert automotive diagnostic assistant 
@@ -60,6 +65,12 @@ def health_check():
 async def chat(request: ChatRequest):
     if not request.question or not request.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty.")
+
+    if client is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Chatbot is not configured. Set the GROQ_API_KEY environment variable.",
+        )
 
     try:
         # Build message history for this session
