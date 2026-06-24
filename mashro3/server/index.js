@@ -17,6 +17,10 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 const PORT = process.env.PORT || 5000;
 const chatbotBaseUrl = process.env.CHATBOT_URL || "http://chatbot:8000";
 
+app.get("/health", (_req, res) => {
+  res.json({ status: "ok" });
+});
+
 // ─── MIDDLEWARE ───────────────────────────────────────────────
 // This is the "wristband checker" — put it in front of any route
 // that requires the user to be logged in

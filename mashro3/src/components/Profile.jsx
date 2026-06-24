@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  API_BASE_URL,
   updateUserProfile,
   getCars,
   addCar,
@@ -31,8 +32,6 @@ import {
 import AppShell, { Container } from "./ui/AppShell";
 import { Card, Button, Badge, SectionHeading } from "./ui/kit";
 import defaultAvatar from "../assets/madian.png";
-
-const API_BASE = "http://localhost:5000/api";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -77,7 +76,7 @@ const Profile = () => {
 
   const fetchNotifications = async (userId) => {
     try {
-      const r = await fetch(`${API_BASE}/notifications/${userId}`, { headers: authHeaders });
+      const r = await fetch(`${API_BASE_URL}/notifications/${userId}`, { headers: authHeaders });
       const data = await r.json();
       setNotifications({ sms: data.sms, email: data.email, whatsapp: data.whatsapp });
     } catch (e) {
@@ -87,7 +86,7 @@ const Profile = () => {
 
   const saveNotifications = async () => {
     try {
-      await fetch(`${API_BASE}/notifications/${user.id}`, {
+      await fetch(`${API_BASE_URL}/notifications/${user.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", ...authHeaders },
         body: JSON.stringify(notifications),
@@ -127,7 +126,7 @@ const Profile = () => {
 
   const generateReferral = async () => {
     try {
-      const r = await fetch(`${API_BASE}/referral/generate`, {
+      const r = await fetch(`${API_BASE_URL}/referral/generate`, {
         method: "POST",
         headers: { "Content-Type": "application/json", ...authHeaders },
       });

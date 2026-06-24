@@ -2,6 +2,7 @@ import { ArrowLeft, Send, Bot, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import defaultAvatar from "../../assets/adham.png";
+import { API_BASE_URL } from "../../api";
 
 /* Suggested prompts shown in the input bar */
 const suggestions = [
@@ -46,7 +47,7 @@ export default function ChatPage() {
         headers.Authorization = `Bearer ${token}`;
       }
 
-      const response = await fetch("http://localhost:5000/api/chat", {
+      const response = await fetch(`${API_BASE_URL}/chat`, {
         method: "POST",
         headers,
         body: JSON.stringify({
